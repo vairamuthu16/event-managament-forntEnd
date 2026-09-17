@@ -1,13 +1,23 @@
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+
+import {
+  AuthProvider
+} from './context/AuthContext';
+
+import {
+  NotificationProvider
+} from './context/NotificationContext';
+
 import Layout from './components/Layout';
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Layout />
-      </AuthProvider>
+      <NotificationProvider>
+        <AuthProvider>
+          <Layout />
+        </AuthProvider>
+      </NotificationProvider>
     </BrowserRouter>
   );
 }
