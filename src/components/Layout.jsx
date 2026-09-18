@@ -38,6 +38,10 @@ function Navigation() {
     logout
   } = useAuth();
 
+  /*
+   * Decide which dashboard belongs to the
+   * currently logged-in user.
+   */
   const dashboardPath =
     user?.role === 'admin'
       ? '/admin'
@@ -68,12 +72,17 @@ function Navigation() {
 
         <nav className="hidden md:flex items-center gap-6">
 
+          {/* HOME */}
+
           <Link
             to="/"
             className="text-sm font-semibold hover:text-brand"
           >
             Home
           </Link>
+
+
+          {/* EVENTS */}
 
           <Link
             to="/events"
@@ -83,7 +92,9 @@ function Navigation() {
           </Link>
 
 
-          {/* ATTENDEE */}
+          {/* =================================================
+              ATTENDEE
+          ================================================= */}
 
           {user?.role === 'attendee' && (
             <Link
@@ -95,7 +106,9 @@ function Navigation() {
           )}
 
 
-          {/* ORGANIZER */}
+          {/* =================================================
+              ORGANIZER
+          ================================================= */}
 
           {user?.role === 'organizer' && (
             <>
@@ -116,7 +129,9 @@ function Navigation() {
           )}
 
 
-          {/* ADMIN */}
+          {/* =================================================
+              ADMIN
+          ================================================= */}
 
           {user?.role === 'admin' && (
             <Link
@@ -136,6 +151,10 @@ function Navigation() {
 
         <div className="flex items-center gap-3">
 
+          {/* =================================================
+              NOT LOGGED IN
+          ================================================= */}
+
           {!user ? (
             <>
               <Link
@@ -153,7 +172,13 @@ function Navigation() {
               </Link>
             </>
           ) : (
+
+            /* =================================================
+               LOGGED IN
+            ================================================= */
+
             <>
+              {/* DASHBOARD */}
 
               <Link
                 to={dashboardPath}
@@ -162,6 +187,19 @@ function Navigation() {
                 {user.name || 'Dashboard'}
               </Link>
 
+
+              {/* PROFILE */}
+
+              <Link
+                to="/profile"
+                className="text-sm font-semibold hover:text-brand"
+              >
+                Profile
+              </Link>
+
+
+              {/* LOGOUT */}
+
               <button
                 type="button"
                 className="btn btn-secondary"
@@ -169,7 +207,6 @@ function Navigation() {
               >
                 Logout
               </button>
-
             </>
           )}
 
@@ -351,13 +388,19 @@ export default function Layout() {
 
 
         {/* =================================================
-            ATTENDEE DASHBOARD
+            ROLE DASHBOARD REDIRECT
+        ================================================= */}
 
-            Dashboard itself handles:
-            - authentication
-            - attendee role
-            - loading
-            - registrations
+        <Route
+          path="/go-dashboard"
+          element={
+            <DashboardRedirect />
+          }
+        />
+
+
+        {/* =================================================
+            ATTENDEE DASHBOARD
         ================================================= */}
 
         <Route
@@ -370,9 +413,7 @@ export default function Layout() {
 
         {/* =================================================
             PROFILE
-
-            Profile remains protected by attendee/role
-            logic inside the page if required.
+            Available to attendee, organizer and admin.
         ================================================= */}
 
         <Route
@@ -397,8 +438,6 @@ export default function Layout() {
 
         {/* =================================================
             ORGANIZER DASHBOARD
-
-            /organizer
         ================================================= */}
 
         <Route
@@ -415,8 +454,6 @@ export default function Layout() {
 
         {/* =================================================
             ORGANIZER CREATE EVENT
-
-            /organizer/event/new
         ================================================= */}
 
         <Route
@@ -433,8 +470,6 @@ export default function Layout() {
 
         {/* =================================================
             ORGANIZER EDIT EVENT
-
-            /organizer/event/:id/edit
         ================================================= */}
 
         <Route
@@ -451,8 +486,6 @@ export default function Layout() {
 
         {/* =================================================
             ORGANIZER ANALYTICS
-
-            /organizer/analytics
         ================================================= */}
 
         <Route
@@ -481,8 +514,6 @@ export default function Layout() {
 
         {/* =================================================
             ADMIN DASHBOARD
-
-            /admin
         ================================================= */}
 
         <Route
@@ -499,8 +530,6 @@ export default function Layout() {
 
         {/* =================================================
             ADMIN CREATE ACCOUNT
-
-            /admin/create-account
         ================================================= */}
 
         <Route
@@ -516,19 +545,7 @@ export default function Layout() {
 
 
         {/* =================================================
-            OPTIONAL ROOT DASHBOARD REDIRECT
-        ================================================= */}
-
-        <Route
-          path="/home-dashboard"
-          element={
-            <DashboardRedirect />
-          }
-        />
-
-
-        {/* =================================================
-            UNKNOWN ROUTES
+            FALLBACK
         ================================================= */}
 
         <Route
